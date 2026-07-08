@@ -89,11 +89,11 @@ You can change these column names in the module fields to match your own HubDB s
 
 ### Desktop view
 
-![Team Members - Desktop](assets/team-members.jpg)
+![Team Members Desktop](assets/team-members-desktop.jpg)
 
 ### Mobile view
 
-![Team Members - Mobile](assets/menu-mobile.jpg)
+![Team Members Mobile](assets/team-members-mobile.jpg)
 
 ## Author
 
