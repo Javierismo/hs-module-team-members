@@ -1,0 +1,242 @@
+[
+  {
+    "id": "cab8d1ea-fafb-4f33-a78c-5e36f8df5f7f",
+    "name": "title",
+    "label": "Title",
+    "tab": "CONTENT",
+    "type": "richtext",
+    "default": "<h2>Meet the team</h2><p>Add a short introduction for your team section.</p>"
+  },
+  {
+    "id": "8afca6bc-35fe-4cb8-90ca-7776eaf627be",
+    "name": "hubdb",
+    "label": "HubDB",
+    "tab": "CONTENT",
+    "type": "group",
+    "children": [
+      {
+        "id": "f88b8a34-57da-4fd4-a30d-4469d9177f7a",
+        "name": "table_id",
+        "label": "HubDB table",
+        "type": "hubdbtable"
+      },
+      {
+        "id": "2e3e9f8e-f220-40bf-af8b-f8fcb2d6f5c6",
+        "name": "order_by",
+        "label": "Order by column",
+        "type": "text",
+        "default": "display_order"
+      },
+      {
+        "id": "0e1083ff-54bc-4ea3-a76e-5601c46ca5f4",
+        "name": "sort_direction",
+        "label": "Sort direction",
+        "type": "choice",
+        "display": "radio",
+        "choices": [["asc", "Ascending"], ["desc", "Descending"]],
+        "default": "asc"
+      },
+      {
+        "id": "3c8d4c1f-7c16-4da0-9d08-6b7f8f6a2f21",
+        "name": "department_filter",
+        "label": "Department filter",
+        "help_text": "Enter the exact department label from HubDB. Leave blank to show all departments.",
+        "type": "text",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "id": "f15f16c0-c457-4b79-b56f-bf4b89f5cc0f",
+    "name": "columns",
+    "label": "Column mapping",
+    "tab": "CONTENT",
+    "inline_help_text": "Map each field to your HubDB column name. If a field is left empty, that piece of data will not be shown.",
+    "type": "group",
+    "children": [
+      {
+        "id": "e4e73687-edb6-4f79-a2cb-d8a4675d8e4f",
+        "name": "name_column",
+        "label": "Name column",
+        "type": "text",
+        "default": "name"
+      },
+      {
+        "id": "f7e8de90-7d9b-4666-8b27-4f542e057b0e",
+        "name": "role_column",
+        "label": "Role column",
+        "type": "text",
+        "default": "role"
+      },
+      {
+        "id": "9fdc0c74-a16a-4773-b30e-7a2bf82eb7fc",
+        "name": "department_column",
+        "label": "Department column",
+        "type": "text",
+        "default": "department"
+      },
+      {
+        "id": "0188914b-d85b-4a17-a865-a8f4facfc863",
+        "name": "bio_column",
+        "label": "Bio column",
+        "type": "text",
+        "default": "bio"
+      },
+      {
+        "id": "6639bb13-f3ba-40fa-9b76-65ec7a89f080",
+        "name": "photo_column",
+        "label": "Photo column",
+        "type": "text",
+        "default": "photo"
+      },
+      {
+        "id": "f93b9885-c64d-42a3-8c7d-d8bf825bd6b3",
+        "name": "email_column",
+        "label": "Email column",
+        "type": "text",
+        "default": "email"
+      },
+      {
+        "id": "f750f6ca-9c16-47b9-bf4f-f5da6dbef605",
+        "name": "linkedin_url_column",
+        "label": "LinkedIn URL column",
+        "type": "text",
+        "default": "linkedin_url"
+      },
+      {
+        "id": "f8f5a09f-f2ef-4454-988d-c2f0764d6cd6",
+        "name": "x_url_column",
+        "label": "X URL column",
+        "type": "text",
+        "default": "x_url"
+      }
+    ]
+  },
+  {
+    "id": "c7ab60d2-39f8-42ef-a436-6a8cd4e10fca",
+    "name": "labels",
+    "label": "Labels",
+    "tab": "CONTENT",
+    "type": "group",
+    "children": [
+      {
+        "id": "2ac2bcf6-4ab0-4e25-8c6b-8fa1fb4b844a",
+        "name": "section_aria_label",
+        "label": "Section aria-label",
+        "type": "text",
+        "default": "Team members"
+      },
+      {
+        "id": "dfc83b54-c8d8-4e92-a17a-84fba11346d8",
+        "name": "email_label",
+        "label": "Email label",
+        "type": "text",
+        "default": "Email"
+      },
+      {
+        "id": "6f6ddcc0-0abd-4f6f-a3e4-379d515f1b2e",
+        "name": "actions_group_label",
+        "label": "Contact links group label",
+        "type": "text",
+        "default": "Contact and social links"
+      },
+      {
+        "id": "0bcf90a8-d370-4f8f-a4d7-f76de8a4c47f",
+        "name": "linkedin_label",
+        "label": "LinkedIn label",
+        "type": "text",
+        "default": "LinkedIn"
+      },
+      {
+        "id": "711aa750-e5db-4959-8597-7f22c9924cd9",
+        "name": "x_label",
+        "label": "X label",
+        "type": "text",
+        "default": "X"
+      },
+      {
+        "id": "08f3f79f-a8b8-4e7f-bf31-4adf4f83f56b",
+        "name": "empty_state",
+        "label": "Empty state message",
+        "type": "text",
+        "default": "No team members found."
+      },
+      {
+        "id": "c78bbf70-bae7-4fca-8dac-b95af49fa7ad",
+        "name": "missing_table_id",
+        "label": "Missing table ID message",
+        "type": "text",
+        "default": "Set a HubDB table ID in this module."
+      }
+    ]
+  },
+  {
+    "id": "5adf7f7e-e58b-4d93-af16-f2db1c3ec833",
+    "name": "style",
+    "label": "Style",
+    "tab": "STYLE",
+    "type": "group",
+    "children": [
+      {
+        "id": "0196e3c1-4d2f-4d4a-8be8-2e80f16c0348",
+        "name": "card_background_color",
+        "label": "Card background",
+        "type": "color",
+        "default": {
+          "color": "#ffffff",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "9aaebce5-4275-4f5f-a646-bcd42f66bc7d",
+        "name": "card_border_color",
+        "label": "Card border",
+        "type": "color",
+        "default": {
+          "color": "#d9d9d9",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "ed6c5e7c-c695-433e-9a5e-4c432a6bfd24",
+        "name": "name_color",
+        "label": "Name color",
+        "type": "color",
+        "default": {
+          "color": "#191919",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "23aa5cc8-d5ff-4388-9d6a-75ddf75f57e5",
+        "name": "role_color",
+        "label": "Role color",
+        "type": "color",
+        "default": {
+          "color": "#4c4c4c",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "98189ab8-e78f-4f4b-a5a4-a4f15c6bf471",
+        "name": "bio_color",
+        "label": "Bio color",
+        "type": "color",
+        "default": {
+          "color": "#4c4c4c",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "d4f5e6a7-8b9c-4d5e-9f6a-1b2c3d4e5f6a",
+        "name": "social_icon_color",
+        "label": "Social icon color",
+        "type": "color",
+        "default": {
+          "color": "#191919",
+          "opacity": 100
+        }
+      }
+    ]
+  }
+]

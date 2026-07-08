@@ -1,0 +1,175 @@
+{% set order_prefix = module.hubdb.sort_direction == "desc" ? "-" : "" %}
+{% set order_query = module.hubdb.order_by ? "orderBy=" ~ order_prefix ~ module.hubdb.order_by : "" %}
+
+{%- if order_query -%}
+    {% set hubdb_query = order_query %}
+{%- else -%}
+    {% set hubdb_query = "" %}
+{%- endif -%}
+
+{% set team_table_id = module.hubdb.table_id.id if module.hubdb.table_id and module.hubdb.table_id.id else module.hubdb.table_id %}
+{% set department_filter = module.hubdb.department_filter|trim|lower %}
+
+{%- if team_table_id -%}
+    {% set team_rows = hubdb_table_rows(team_table_id, hubdb_query) %}
+{%- else -%}
+    {% set team_rows = [] %}
+{%- endif -%}
+
+{% require_css %}
+    <style>
+        {% scope_css %}
+            {# Module-scoped color tokens let the card styles stay editable from the module fields. #}
+            {% if module.style.card_background_color.color %}
+                .ht-team-members {
+                    --ht-team-members-card-background: rgba({{ module.style.card_background_color.color|convert_rgb }}, {{ module.style.card_background_color.opacity / 100 }});
+                }
+            {% endif %}
+
+            {% if module.style.card_border_color.color %}
+                .ht-team-members {
+                    --ht-team-members-card-border: rgba({{ module.style.card_border_color.color|convert_rgb }}, {{ module.style.card_border_color.opacity / 100 }});
+                }
+            {% endif %}
+
+            {% if module.style.name_color.color %}
+                .ht-team-members {
+                    --ht-team-members-name: rgba({{ module.style.name_color.color|convert_rgb }}, {{ module.style.name_color.opacity / 100 }});
+                }
+            {% endif %}
+
+            {% if module.style.role_color.color %}
+                .ht-team-members {
+                    --ht-team-members-role: rgba({{ module.style.role_color.color|convert_rgb }}, {{ module.style.role_color.opacity / 100 }});
+                }
+            {% endif %}
+
+            {% if module.style.bio_color.color %}
+                .ht-team-members {
+                    --ht-team-members-bio: rgba({{ module.style.bio_color.color|convert_rgb }}, {{ module.style.bio_color.opacity / 100 }});
+                }
+            {% endif %}
+
+            {% if module.style.social_icon_color.color %}
+                .ht-team-members {
+                    --ht-team-members-social-icon: rgba({{ module.style.social_icon_color.color|convert_rgb }}, {{ module.style.social_icon_color.opacity / 100 }});
+                }
+            {% endif %}
+
+        {% end_scope_css %}
+    </style>
+{% end_require_css %}
+
+{# Build the filtered cards first so the empty state can account for department filtering. #}
+{% set rendered_cards %}
+    {%- for row in team_rows -%}
+        {%- set member_name = row[module.columns.name_column] -%}
+        {%- set member_role = row[module.columns.role_column] -%}
+        {%- set member_bio = row[module.columns.bio_column] -%}
+        {%- set member_department_raw = row[module.columns.department_column] -%}
+        {%- set member_photo = row[module.columns.photo_column] -%}
+        {%- set member_email = row[module.columns.email_column] -%}
+        {%- set member_linkedin = row[module.columns.linkedin_url_column] -%}
+        {%- set member_x = row[module.columns.x_url_column] -%}
+
+        {%- if member_department_raw and member_department_raw.label -%}
+            {% set member_department = member_department_raw.label -%}
+        {%- elif member_department_raw and member_department_raw.name -%}
+            {% set member_department = member_department_raw.name %}
+        {%- else -%}
+            {% set member_department = member_department_raw %}
+        {%- endif -%}
+
+        {%- set member_department_normalized = member_department|default('')|trim|lower -%}
+        {%- set member_photo_src = member_photo.url if member_photo.url else member_photo -%}
+        {%- set member_linkedin_url = member_linkedin.href if member_linkedin and member_linkedin.href else member_linkedin -%}
+        {%- set member_x_url = member_x.href if member_x and member_x.href else member_x -%}
+
+        {%- if not department_filter or member_department_normalized == department_filter -%}
+
+            <article class="ht-team-members__card">
+                <div class="ht-team-members__top">
+                    {%- if member_photo_src -%}
+                        <div class="ht-team-members__media">
+                            <img
+                                class="ht-team-members__image"
+                                src="{{ member_photo_src|escape_url }}"
+                                alt="{{ member_name|default('Team member')|escape_attr }}"
+                                loading="lazy"
+                            >
+                        </div>
+                    {%- endif -%}
+
+                    <div class="ht-team-members__content">
+                        {%- if member_name -%}
+                            <h3 class="ht-team-members__name">{{ member_name }}</h3>
+                        {%- endif -%}
+
+                        {%- if member_role -%}
+                            <p class="ht-team-members__role">{{ member_role }}</p>
+                        {%- endif -%}
+
+                        {%- if member_department -%}
+                            <p class="ht-team-members__department">{{ member_department }}</p>
+                        {%- endif -%}
+
+                        {%- if member_bio -%}
+                            <div class="ht-team-members__bio">{{ member_bio|sanitize_html }}</div>
+                        {%- endif -%}
+
+                    </div>
+                </div>
+
+                {%- if member_email or member_linkedin_url or member_x_url -%}
+                    <div class="ht-team-members__actions" aria-label="{{ module.labels.actions_group_label|default('Contact and social links')|escape_attr }}">
+                        {%- if member_email -%}
+                            <a class="ht-team-members__link" href="mailto:{{ member_email|escape_attr }}" aria-label="{{ module.labels.email_label|escape_attr }}">
+                                <svg class="ht-team-members__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="none" aria-hidden="true" focusable="false">
+                                    <path d="M25.6463 6.10451C25.545 6.09407 25.4429 6.09407 25.3415 6.10451H4.52872C4.39533 6.10657 4.26282 6.12657 4.13477 6.16397L14.8757 16.8603L25.6463 6.10451Z" fill="currentColor"/>
+                                    <path d="M26.7457 7.1377L15.923 17.9158C15.6445 18.1927 15.2677 18.3481 14.875 18.3481C14.4822 18.3481 14.1054 18.1927 13.8269 17.9158L3.10086 7.21946C3.06789 7.34065 3.0504 7.46553 3.04883 7.59112V22.4574C3.04883 22.8517 3.20545 23.2298 3.48425 23.5086C3.76305 23.7874 4.14118 23.9441 4.53546 23.9441H25.3483C25.7426 23.9441 26.1207 23.7874 26.3995 23.5086C26.6783 23.2298 26.8349 22.8517 26.8349 22.4574V7.59112C26.829 7.43625 26.7989 7.28326 26.7457 7.1377ZM5.5538 22.4574H4.52059V21.3945L9.92449 16.0352L10.9726 17.0833L5.5538 22.4574ZM25.3334 22.4574H24.2928L18.874 17.0833L19.9221 16.0352L25.326 21.3945L25.3334 22.4574Z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                        {%- endif -%}
+
+                        {%- if member_linkedin_url -%}
+                            <a class="ht-team-members__link" href="{{ member_linkedin_url|escape_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ module.labels.linkedin_label|escape_attr }}">
+                                <svg class="ht-team-members__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="none" aria-hidden="true" focusable="false">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M23.4717 3.9624C24.8184 3.9624 25.9101 5.05413 25.9102 6.40088V23.4712C25.9102 24.818 24.8185 25.9097 23.4717 25.9097H6.40137C5.05462 25.9096 3.96289 24.818 3.96289 23.4712V6.40088C3.96296 5.05418 5.05467 3.96248 6.40137 3.9624H23.4717ZM7.3252 22.8618H10.5986V12.2944H7.3252V22.8618ZM19.0156 11.9712C16.7732 11.9712 15.8291 13.7183 15.8291 13.7183V12.2944H12.6904V22.8618H15.8291V17.3149C15.8291 15.8286 16.5137 14.9438 17.8232 14.9438C19.027 14.9439 19.6045 15.7941 19.6045 17.3149V22.8618H22.8613V16.1714C22.8613 13.3406 21.257 11.9712 19.0156 11.9712ZM8.94629 7.01123C7.87726 7.01123 7.01089 7.88373 7.01074 8.96045C7.01074 10.0373 7.87717 10.9106 8.94629 10.9106C10.0154 10.9106 10.8809 10.0373 10.8809 8.96045C10.8807 7.88376 10.0153 7.01128 8.94629 7.01123Z" fill="black"/>
+                                </svg>
+                            </a>
+                        {%- endif -%}
+
+                        {%- if member_x_url -%}
+                            <a class="ht-team-members__link" href="{{ member_x_url|escape_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ module.labels.x_label|escape_attr }}">
+                                <svg class="ht-team-members__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="none" aria-hidden="true" focusable="false">
+                                    <path d="M10.3759 6.29967H7.66581L20.1402 23.7594H22.8503L10.3759 6.29967ZM5.26562 5H11.2211L16.3847 12.3531L22.8495 5H24.6138L17.1681 13.4688L25.2656 25H19.3102L13.8572 17.2347L7.03006 25H5.26562L13.0737 16.119L5.26562 5Z" fill="currentColor"/>
+                                </svg>
+                            </a>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+
+            </article>
+        {%- endif -%}
+    {%- endfor -%}
+{% endset %}
+
+{# Fall back to a configurable label when the section does not have a visible heading. #}
+<section class="ht-team-members" {% if module.title %}aria-labelledby="ht-team-members-heading"{% else %}aria-label="{{ module.labels.section_aria_label|default('Team members')|escape_attr }}"{% endif %}>
+
+    {%- if module.title -%}
+        <div class="ht-team-members__intro" id="ht-team-members-heading">
+            {{ module.title }}
+        </div>
+    {%- endif -%}
+
+    {% if not team_table_id %}
+        <p class="ht-team-members__message">{{ module.labels.missing_table_id }}</p>
+    {% elif rendered_cards|trim == "" %}
+        <p class="ht-team-members__message">{{ module.labels.empty_state }}</p>
+    {% else %}
+        <div class="ht-team-members__grid">
+            {{ rendered_cards }}
+        </div>
+    {% endif %}
+</section>
