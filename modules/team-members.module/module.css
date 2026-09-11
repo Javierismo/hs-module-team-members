@@ -138,3 +138,12 @@
 }
 
 
+@media (prefers-reduced-motion: reduce) {
+    /* Respect reduced motion preferences for accessibility */
+    .ht-team-members *,
+    .ht-team-members *::before,
+    .ht-team-members *::after {
+        transition-duration: 0ms !important;
+        animation-duration: 0ms !important;
+    }
+}
