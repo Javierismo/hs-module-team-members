@@ -29,12 +29,18 @@
     align-content: space-between;
 	overflow: hidden;
 	border: 1px solid var(--ht-team-members-card-border);
-	border-radius: 0.75rem;
 	background: var(--ht-team-members-card-background);
+    border-radius: 2.75rem;
+}
+.ht-team-members__card:hover .ht-team-members__image {
+    transform: scale(1.07);
 }
 
 .ht-team-members__media {
-  	aspect-ratio: 7 / 6;
+	aspect-ratio: 7 / 8;
+	border-radius: 38px 38px 60px 60px;
+	overflow: hidden;
+	margin: 5px 5px 0 5px;
 }
 
 .ht-team-members__image {
@@ -42,14 +48,16 @@
 	height: 100%;
 	object-fit: cover;
 	display: block;
+	transition: all 0.8s ease;
 }
 
 .ht-team-members__content {
   	padding: 1rem;
+	padding: 1.8rem 1.5rem 1.2rem 1.5rem;
 }
 
 .ht-team-members__actions {
-  	padding: 1rem 1rem 1rem 1rem;
+	padding: 0 1.5rem 1.8rem 1.5rem;
 }
 
 .ht-team-members__name {
@@ -128,3 +136,5 @@
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 }
+
+
